@@ -50,9 +50,7 @@ const finalAccuracyElement =
   ) as HTMLSpanElement;
 
 
-/* =========================================================
-   RENDERER
-========================================================= */
+
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
