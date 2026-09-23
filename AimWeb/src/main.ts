@@ -1,19 +1,7 @@
 import * as THREE from "three";
 import "./style.css";
 
-/*
-===========================================================
-                        AIMWEB
-              3D FPS AIM TRAINER WEB GAME
 
-                    Created By Twisted0097
-===========================================================
-*/
-
-
-/* =========================================================
-   HTML ELEMENTS
-========================================================= */
 
 const game = document.getElementById("game") as HTMLDivElement;
 
@@ -92,9 +80,7 @@ renderer.shadowMap.enabled = false;
 game.appendChild(renderer.domElement);
 
 
-/* =========================================================
-   SCENE
-========================================================= */
+
 
 const scene = new THREE.Scene();
 
@@ -102,9 +88,7 @@ scene.background =
   new THREE.Color(0x080808);
 
 
-/* =========================================================
-   CAMERA
-========================================================= */
+
 
 const camera =
   new THREE.PerspectiveCamera(
@@ -127,9 +111,7 @@ camera.rotation.order =
 scene.add(camera);
 
 
-/* =========================================================
-   LIGHTING
-========================================================= */
+
 
 const ambientLight =
   new THREE.HemisphereLight(
@@ -155,9 +137,7 @@ directionalLight.position.set(
 scene.add(directionalLight);
 
 
-/* =========================================================
-   FLOOR
-========================================================= */
+
 
 const floorGeometry =
   new THREE.PlaneGeometry(
@@ -186,9 +166,6 @@ floor.position.y = 0;
 scene.add(floor);
 
 
-/* =========================================================
-   WALLS
-========================================================= */
 
 const wallMaterial =
   new THREE.MeshStandardMaterial({
@@ -254,9 +231,7 @@ rightWall.position.set(
 scene.add(rightWall);
 
 
-/* =========================================================
-   TARGET SYSTEM
-========================================================= */
+
 
 interface Target {
   mesh: THREE.Mesh;
@@ -394,9 +369,7 @@ function maintainTargets(): void {
 }
 
 
-/* =========================================================
-   GAME STATE
-========================================================= */
+
 
 let gameStarted = false;
 
@@ -416,9 +389,7 @@ let remainingTime =
   GAME_DURATION;
 
 
-/* =========================================================
-   CAMERA / MOUSE
-========================================================= */
+
 
 let yaw = 0;
 
@@ -439,10 +410,7 @@ function handleMouseMove(
     return;
   }
 
-  /*
-   * movementX / movementY come from
-   * Pointer Lock.
-   */
+
   yaw -=
     event.movementX *
     mouseSensitivity;
@@ -482,16 +450,7 @@ function updateCamera(): void {
 }
 
 
-/* =========================================================
-   POINTER LOCK
-========================================================= */
 
-/*
- * Ask the browser to lock the mouse.
- *
- * This MUST be called from a user action
- * such as clicking Start or Resume.
- */
 async function lockMouse(): Promise<void> {
   if (
     document.pointerLockElement ===
@@ -503,10 +462,7 @@ async function lockMouse(): Promise<void> {
   try {
     await renderer.domElement.requestPointerLock();
   } catch {
-    /*
-     * Some browsers can reject Pointer Lock.
-     * The game itself will continue running.
-     */
+
   }
 }
 
@@ -525,9 +481,7 @@ function unlockMouse(): void {
 }
 
 
-/* =========================================================
-   SHOOTING
-========================================================= */
+
 
 const raycaster =
   new THREE.Raycaster();
@@ -620,9 +574,7 @@ function shoot(): void {
 }
 
 
-/*
- * Shoot with left mouse button.
- */
+
 document.addEventListener(
   "mousedown",
   (event) => {
@@ -643,9 +595,7 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   START GAME
-========================================================= */
+
 
 async function startGame(): Promise<void> {
   gameStarted = true;
@@ -693,17 +643,12 @@ async function startGame(): Promise<void> {
 
   updateHUD();
 
-  /*
-   * Pointer Lock is requested because
-   * Start was clicked by the user.
-   */
+
   await lockMouse();
 }
 
 
-/* =========================================================
-   PAUSE
-========================================================= */
+
 
 function pauseGame(): void {
   if (
@@ -719,22 +664,11 @@ function pauseGame(): void {
     "hidden",
   );
 
-  /*
-   * DO NOT call exitPointerLock()
-   * here.
-   *
-   * Pressing ESC itself already causes
-   * browsers to release Pointer Lock.
-   *
-   * The CSS cursor remains hidden while
-   * the pause menu is displayed.
-   */
+
 }
 
 
-/* =========================================================
-   RESUME
-========================================================= */
+
 
 async function resumeGame(): Promise<void> {
   if (
@@ -753,18 +687,11 @@ async function resumeGame(): Promise<void> {
 
   gamePaused = false;
 
-  /*
-   * The user has clicked the Resume
-   * button, so this is a valid user
-   * gesture for requesting Pointer Lock.
-   */
+
   await lockMouse();
 }
 
 
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
 
 document.addEventListener(
   "keydown",
@@ -776,16 +703,7 @@ document.addEventListener(
       return;
     }
 
-    /*
-     * IMPORTANT:
-     *
-     * Do not try to call preventDefault()
-     * and do not try to immediately
-     * request Pointer Lock here.
-     *
-     * Browsers intentionally allow ESC
-     * to exit Pointer Lock.
-     */
+
     if (
       gameStarted &&
       !gameFinished
@@ -798,9 +716,7 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   POINTER LOCK CHANGE
-========================================================= */
+
 
 document.addEventListener(
   "pointerlockchange",
@@ -809,13 +725,7 @@ document.addEventListener(
       document.pointerLockElement ===
       renderer.domElement;
 
-    /*
-     * When ESC is pressed, the browser
-     * changes pointer lock to false.
-     *
-     * If we're playing, show the pause
-     * screen.
-     */
+
     if (
       gameStarted &&
       !gameFinished &&
@@ -827,10 +737,6 @@ document.addEventListener(
   },
 );
 
-
-/* =========================================================
-   TIMER
-========================================================= */
 
 let lastGameTime =
   performance.now();
@@ -863,9 +769,6 @@ function updateGameTimer(
 }
 
 
-/* =========================================================
-   GAME OVER
-========================================================= */
 
 function finishGame(): void {
   gameFinished = true;
@@ -891,9 +794,7 @@ function finishGame(): void {
 }
 
 
-/* =========================================================
-   HUD
-========================================================= */
+
 
 function updateHUD(): void {
   scoreElement.textContent =
@@ -918,9 +819,7 @@ function updateHUD(): void {
 }
 
 
-/* =========================================================
-   FPS COUNTER
-========================================================= */
+
 
 let fpsFrames = 0;
 
@@ -954,17 +853,12 @@ function updateFPS(
 }
 
 
-/* =========================================================
-   TARGET MOVEMENT
-========================================================= */
+
 
 function updateTargets(
   deltaSeconds: number,
 ): void {
-  /*
-   * Limit the maximum simulation
-   * delta to prevent large jumps.
-   */
+
   const dt =
     Math.min(
       deltaSeconds,
@@ -1002,9 +896,7 @@ function updateTargets(
 }
 
 
-/* =========================================================
-   MAIN RENDER LOOP
-========================================================= */
+
 
 function animate(
   currentTime: number,
@@ -1045,9 +937,7 @@ function animate(
 }
 
 
-/* =========================================================
-   RESIZE
-========================================================= */
+
 
 function handleResize(): void {
   const width =
@@ -1083,9 +973,6 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   BUTTONS
-========================================================= */
 
 startButton.addEventListener(
   "click",
@@ -1109,11 +996,6 @@ restartButton.addEventListener(
     void startGame();
   },
 );
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
 
 updateHUD();
 
